@@ -1,0 +1,61 @@
+{
+  "name": "hermes-shops-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hermes-shops desktop shell for the local Hermes sidecar",
+  "author": "Hermes-shops contributors",
+  "license": "MIT",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "build:web": "npm --prefix ../web run build",
+    "build:sidecar": "python ./scripts/build_sidecar_bundle.py",
+    "build:node-runtime": "python ./scripts/build_node_runtime_bundle.py",
+    "dist": "npm run build:web && npm run build:sidecar && npm run build:node-runtime && electron-builder --publish never",
+    "dist:dir": "npm run build:web && npm run build:sidecar && npm run build:node-runtime && electron-builder --dir --publish never"
+  },
+  "devDependencies": {
+    "electron": "^32.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "ai.hermes.shops",
+    "productName": "Hermes-shops",
+    "directories": {
+      "output": "dist/electron"
+    },
+    "files": [
+      "main.cjs"
+    ],
+    "extraResources": [
+      {
+        "from": "dist/sidecar",
+        "to": "sidecar"
+      },
+      {
+        "from": "dist/node-runtime",
+        "to": "node-runtime"
+      }
+    ],
+    "mac": {
+      "artifactName": "Hermes-shops-${version}-${arch}.${ext}",
+      "category": "public.app-category.developer-tools",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "artifactName": "Hermes-shops-${version}-${arch}.${ext}",
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
