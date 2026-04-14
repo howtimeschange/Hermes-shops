@@ -1,6 +1,6 @@
 {
   "name": "hermes-shops-desktop",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": true,
   "description": "Hermes-shops desktop shell for the local Hermes sidecar",
   "author": "Hermes-shops contributors",

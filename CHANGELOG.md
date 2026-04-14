@@ -1,3 +1,8 @@
+## 1.0.5 - 2026-04-14
+
+### Fixes
+- Limit desktop release uploads to the actual installable artifacts and updater metadata so tagged Hermes-shops releases produce a clean draft release instead of uploading exploded runtime internals.
+
 ## 1.0.4 - 2026-04-14
 
 ### Fixes

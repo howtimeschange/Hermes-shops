@@ -59,11 +59,48 @@ jobs:
       - name: Build desktop installers
         run: npm --prefix desktop run dist
 
+      - name: Collect release assets
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import shutil
+
+          root = Path("desktop/dist/electron")
+          out = root / "release-assets"
+          out.mkdir(parents=True, exist_ok=True)
+
+          patterns = [
+              "Hermes-shops-*.dmg",
+              "Hermes-shops-*.zip",
+              "Hermes-shops-*.exe",
+              "Hermes-shops-*.blockmap",
+              "latest*.yml",
+              "latest*.yaml",
+          ]
+
+          copied = []
+          seen = set()
+          for pattern in patterns:
+              for path in sorted(root.glob(pattern)):
+                  if not path.is_file() or path.name in seen:
+                      continue
+                  shutil.copy2(path, out / path.name)
+                  copied.append(path.name)
+                  seen.add(path.name)
+
+          if not copied:
+              raise SystemExit(f"No release assets found under {root}")
+
+          print("Collected release assets:")
+          for name in copied:
+              print(f" - {name}")
+          PY
+
       - name: Upload desktop artifacts
         uses: actions/upload-artifact@v4
         with:
           name: hermes-shops-${{ matrix.os }}
-          path: desktop/dist/electron/*
+          path: desktop/dist/electron/release-assets/*
 
   publish-release:
     if: startsWith(github.ref, 'refs/tags/hermes-shops-v')
@@ -76,9 +113,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: release-artifacts
+          merge-multiple: true
 
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
-          files: release-artifacts/**/*
+          files: release-artifacts/*
