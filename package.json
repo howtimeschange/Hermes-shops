@@ -1,6 +1,6 @@
 {
   "name": "hermes-shops",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Hermes-shops desktop source tree with the Hermes sidecar, web UI, and bundled browser runtime build pipeline.",
   "private": true,
   "scripts": {

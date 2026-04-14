@@ -1,3 +1,8 @@
+## 1.0.4 - 2026-04-14
+
+### Fixes
+- Grant `contents: write` to the desktop release publish job so tagged Hermes-shops releases can create draft GitHub releases without manual intervention.
+
 ## 1.0.3 - 2026-04-14
 
 ### Fixes
