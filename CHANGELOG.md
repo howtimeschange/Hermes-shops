@@ -1,3 +1,8 @@
+## 1.0.2 - 2026-04-14
+
+### Fixes
+- Isolate desktop app-factory session DB state in tests so Windows GitHub Actions workers do not contend on a shared SQLite path during xdist runs.
+
 ## 1.0.1 - 2026-04-14
 
 ### Fixes

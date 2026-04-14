@@ -2,17 +2,19 @@ import asyncio
 
 import pytest
 
+import hermes_state
 from hermes_server.app_factory import create_app
 from hermes_server.run_manager import DesktopRun, PendingApproval, PendingClarify
 
 
 @pytest.fixture
-def client():
+def client(tmp_path, monkeypatch):
     try:
         from starlette.testclient import TestClient
     except ImportError:
         pytest.skip("fastapi/starlette not installed")
 
+    monkeypatch.setattr(hermes_state, "DEFAULT_DB_PATH", tmp_path / "state.db")
     app = create_app(port=8765)
     manager = app.state.desktop_run_manager
     manager._runs.clear()
