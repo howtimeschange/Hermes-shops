@@ -1,3 +1,8 @@
+## 1.0.6 - 2026-04-14
+
+### Fixes
+- Run the release-asset collection step under `bash` so the shared Python heredoc works on Windows GitHub Actions runners as well as macOS.
+
 ## 1.0.5 - 2026-04-14
 
 ### Fixes

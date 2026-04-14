@@ -60,6 +60,7 @@ jobs:
         run: npm --prefix desktop run dist
 
       - name: Collect release assets
+        shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
