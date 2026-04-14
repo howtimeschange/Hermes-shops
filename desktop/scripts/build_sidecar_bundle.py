@@ -22,7 +22,7 @@ DESKTOP_EXTRAS = "web,cron,pty,mcp,acp,honcho"
 
 
 def _run(cmd: list[str], *, cwd: Path | None = None, env: dict[str, str] | None = None) -> None:
-    print("→", " ".join(cmd))
+    print("[run]", " ".join(cmd))
     subprocess.run(cmd, cwd=cwd or ROOT, env=env, check=True)
 
 
@@ -66,7 +66,7 @@ def build_sidecar_bundle(output_dir: Path, *, clean: bool) -> Path:
         + "\n",
         encoding="utf-8",
     )
-    print(f"✓ Sidecar bundle ready at {output_dir}")
+    print(f"[ok] Sidecar bundle ready at {output_dir}")
     return output_dir
 
 

@@ -1,3 +1,8 @@
+## 1.0.1 - 2026-04-14
+
+### Fixes
+- Replace non-ASCII desktop bundler status glyphs with ASCII output so Windows GitHub Actions runners can build the sidecar bundle successfully.
+
 ## 1.0.0 - 2026-04-14
 
 ### Features

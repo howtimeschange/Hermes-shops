@@ -29,7 +29,7 @@ DEFAULT_NODE_VERSION = os.getenv("HERMES_DESKTOP_NODE_VERSION", "20.19.0")
 
 
 def _run(cmd: list[str], *, cwd: Path | None = None, env: dict[str, str] | None = None) -> None:
-    print("→", " ".join(cmd))
+    print("[run]", " ".join(cmd))
     subprocess.run(cmd, cwd=cwd or ROOT, env=env, check=True)
 
 
@@ -40,6 +40,15 @@ def _read_root_browser_version() -> str:
     if not version:
         raise SystemExit("package.json does not declare an agent-browser dependency.")
     return version
+
+
+def _read_root_product_version() -> str:
+    package_json = ROOT / "package.json"
+    data = json.loads(package_json.read_text(encoding="utf-8"))
+    version = data.get("version")
+    if not version:
+        raise SystemExit("package.json does not declare a product version.")
+    return str(version)
 
 
 def _detect_node_target() -> tuple[str, str, str]:
@@ -76,7 +85,7 @@ def _download_node_archive(version: str, *, download_dir: Path) -> tuple[Path, s
     archive_name = f"node-v{version}-{target_os}-{target_arch}"
     url = f"https://nodejs.org/dist/v{version}/{archive_name}.{archive_ext}"
     archive_path = download_dir / f"{archive_name}.{archive_ext}"
-    print(f"↓ Downloading {url}")
+    print(f"[download] {url}")
     urllib.request.urlretrieve(url, archive_path)
     return archive_path, archive_name
 
@@ -143,6 +152,7 @@ def build_node_runtime_bundle(output_dir: Path, *, clean: bool, node_version: st
     if missing:
         raise SystemExit(f"Node runtime bundle is incomplete, missing: {', '.join(missing)}")
 
+    product_version = _read_root_product_version()
     agent_browser_version = _read_root_browser_version()
     package_json = output_dir / "package.json"
     package_json.write_text(
@@ -150,7 +160,7 @@ def build_node_runtime_bundle(output_dir: Path, *, clean: bool, node_version: st
             {
                 "name": "hermes-shops-browser-runtime",
                 "private": True,
-                "version": "1.0.0",
+                "version": product_version,
                 "description": "Bundled browser runtime for Hermes-shops",
                 "dependencies": {
                     "agent-browser": agent_browser_version,
@@ -184,7 +194,7 @@ def build_node_runtime_bundle(output_dir: Path, *, clean: bool, node_version: st
         + "\n",
         encoding="utf-8",
     )
-    print(f"✓ Browser runtime bundle ready at {output_dir}")
+    print(f"[ok] Browser runtime bundle ready at {output_dir}")
     return output_dir
 
 
