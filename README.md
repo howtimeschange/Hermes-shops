@@ -50,7 +50,7 @@ npm --prefix desktop run dist
 ## Release Flow
 
 1. Push the `main` branch to `howtimeschange/Hermes-shops`.
-2. Create a release tag such as `hermes-shops-v1.0.2`.
+2. Create a release tag such as `hermes-shops-v1.0.3`.
 3. Push the tag.
 4. GitHub Actions builds the desktop artifacts and opens a draft release.
 
@@ -58,8 +58,8 @@ Example:
 
 ```bash
 git push origin main
-git tag hermes-shops-v1.0.2
-git push origin hermes-shops-v1.0.2
+git tag hermes-shops-v1.0.3
+git push origin hermes-shops-v1.0.3
 ```
 
 ## Notes

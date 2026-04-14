@@ -1,3 +1,8 @@
+## 1.0.3 - 2026-04-14
+
+### Fixes
+- Install bundled browser runtime dependencies under `node-runtime/app/` so Windows desktop builds keep portable Node's bundled npm intact while still exposing `agent-browser` on PATH.
+
 ## 1.0.2 - 2026-04-14
 
 ### Fixes

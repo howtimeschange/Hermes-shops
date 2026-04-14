@@ -116,6 +116,7 @@ def _desktop_node_runtime_dirs(node_home: str) -> list[str]:
     candidates = [
         os.path.join(node_home, "bin"),
         os.path.join(node_home, "Scripts"),
+        os.path.join(node_home, "app", "node_modules", ".bin"),
         os.path.join(node_home, "node_modules", ".bin"),
         node_home,
     ]

@@ -138,6 +138,10 @@ def _agent_browser_cli(output_dir: Path) -> Path:
     return output_dir / "node_modules" / ".bin" / "agent-browser"
 
 
+def _runtime_app_dir(output_dir: Path) -> Path:
+    return output_dir / "app"
+
+
 def build_node_runtime_bundle(output_dir: Path, *, clean: bool, node_version: str) -> Path:
     if clean and output_dir.exists():
         shutil.rmtree(output_dir)
@@ -154,7 +158,9 @@ def build_node_runtime_bundle(output_dir: Path, *, clean: bool, node_version: st
 
     product_version = _read_root_product_version()
     agent_browser_version = _read_root_browser_version()
-    package_json = output_dir / "package.json"
+    app_dir = _runtime_app_dir(output_dir)
+    app_dir.mkdir(parents=True, exist_ok=True)
+    package_json = app_dir / "package.json"
     package_json.write_text(
         json.dumps(
             {
@@ -177,8 +183,10 @@ def build_node_runtime_bundle(output_dir: Path, *, clean: bool, node_version: st
     env.setdefault("npm_config_fund", "false")
     env.setdefault("npm_config_audit", "false")
 
-    _run([str(npm_exe), "install", "--omit=dev"], cwd=output_dir, env=env)
-    _run([str(_agent_browser_cli(output_dir)), "install"], cwd=output_dir, env=env)
+    # Keep app dependencies in a child directory so Windows' portable Node
+    # runtime can preserve its own bundled npm installation under node_modules/.
+    _run([str(npm_exe), "install", "--omit=dev"], cwd=app_dir, env=env)
+    _run([str(_agent_browser_cli(app_dir)), "install"], cwd=app_dir, env=env)
 
     manifest = output_dir / "manifest.txt"
     manifest.write_text(
@@ -188,6 +196,7 @@ def build_node_runtime_bundle(output_dir: Path, *, clean: bool, node_version: st
                 f"node={node_exe}",
                 f"npm={npm_exe}",
                 f"agent_browser={agent_browser_version}",
+                f"app_dir={app_dir}",
                 f"playwright_browsers={env['PLAYWRIGHT_BROWSERS_PATH']}",
             ]
         )

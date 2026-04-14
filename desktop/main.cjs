@@ -97,10 +97,12 @@ function collectNodePathEntries(nodeHome) {
     ? [
         nodeHome,
         path.join(nodeHome, "Scripts"),
+        path.join(nodeHome, "app", "node_modules", ".bin"),
         path.join(nodeHome, "node_modules", ".bin"),
       ]
     : [
         path.join(nodeHome, "bin"),
+        path.join(nodeHome, "app", "node_modules", ".bin"),
         path.join(nodeHome, "node_modules", ".bin"),
         nodeHome,
       ];

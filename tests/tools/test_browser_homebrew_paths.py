@@ -146,7 +146,7 @@ class TestFindAgentBrowser:
     def test_finds_in_bundled_desktop_node_runtime(self):
         """Should discover agent-browser in a bundled desktop node runtime."""
         bundled_home = "/tmp/hermes-node-runtime"
-        bundled_bin = f"{bundled_home}/node_modules/.bin"
+        bundled_bin = f"{bundled_home}/app/node_modules/.bin"
 
         def mock_which(cmd, path=None):
             if cmd == "agent-browser" and path and bundled_bin in path.split(os.pathsep):
@@ -156,7 +156,7 @@ class TestFindAgentBrowser:
         real_isdir = os.path.isdir
 
         def selective_isdir(value):
-            if value in {bundled_home, bundled_bin}:
+            if value in {bundled_home, f"{bundled_home}/app", f"{bundled_home}/app/node_modules", bundled_bin}:
                 return True
             return real_isdir(value)
 
